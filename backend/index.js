@@ -9,6 +9,34 @@ const bcrypt = require("bcrypt");
 app.use(cors());
 app.use(express.json());
 
+
+app.post("/", async (req,res) => {
+
+    try {
+        const {  email, pass } = req.body;
+        const loginUser = await pool.query("SELECT * FROM my_table where user_email = $1", [ email ]);
+    
+        if (loginUser.rows.length === 0) {
+          return res.status(405).json("Email does not exist");
+        }
+    
+         const validPassword = await bcrypt.compare(
+          pass,
+          loginUser.rows[0].user_password
+        );
+    
+        if (!validPassword) {
+          return res.status(405).json("Invalid Credential");
+    
+        } 
+        res.json(loginUser.rows[0]);
+      } catch (err) {
+        console.error(err.message);
+      }
+
+
+});
+
 app.post("/create", async (req, res) => {
  try{
 
@@ -49,6 +77,8 @@ app.post("/create", async (req, res) => {
 
 
 });
+
+
 
 app.listen(5000, () => {
     console.log("server has started on port 5000");
