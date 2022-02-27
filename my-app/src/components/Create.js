@@ -27,7 +27,7 @@ const InputUser = () => {
     e.preventDefault();
     try {
       const body = { name , email , pass , re_pass };
-      const response = await fetch("http://localhost:5000/",{
+      const response = await fetch("http://localhost:5000/create",{
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify(body)

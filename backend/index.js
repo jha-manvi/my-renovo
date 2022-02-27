@@ -9,25 +9,27 @@ const bcrypt = require("bcrypt");
 app.use(cors());
 app.use(express.json());
 
-app.post("/", async (req, res) => {
+app.post("/create", async (req, res) => {
  try{
 
  const { name , email , pass , re_pass } =req.body;
 
  const newUser1 = await pool.query("SELECT * FROM my_table WHERE user_email = $1", [email]);
 
-  if (newUser1.rows.length > 0) {
-    
-     res.status(401).json("User already exists !");
-  }
-
-  const salt = await bcrypt.genSalt(10);
+ const salt = await bcrypt.genSalt(10);
   const bcryptPassword = await bcrypt.hash(pass, salt);
   const bcryptRePassword = await bcrypt.hash(re_pass, salt);
 
   // const validity = bcryptPassword.compare(bcryptRePassword);
 
-  if(pass != re_pass) {
+  if (newUser1.rows.length > 0) {
+    
+     res.status(401).json("User already exists !");
+  }
+
+  
+
+  else if(pass != re_pass) {
       res.status(403).json("Passwords do not match");
   }
 

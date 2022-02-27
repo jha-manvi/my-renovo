@@ -16,7 +16,7 @@ function App() {
     // <Login/>npm yarn add react-router-dom
     <Router>
       <Routes>
-        <Route exact path="/" element={<Create/>}>
+        <Route exact path="/create" element={<Create/>}>
         </Route>
       </Routes>
       
